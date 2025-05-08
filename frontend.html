@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign Language Translator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+        }
+        #video {
+            border: 2px solid #333;
+            margin-top: 20px;
+        }
+        #roi {
+            position: absolute;
+            border: 2px dashed red;
+            pointer-events: none;
+        }
+        #prediction {
+            margin-top: 20px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        #speakBtn {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Sign Language Translator</h1>
+    <video id="video" width="640" height="480" autoplay></video>
+    <div id="roi" style="width:200px; height:200px; top:140px; left:220px;"></div>
+    <div id="prediction">Prediction: <span id="predictedChar">None</span></div>
+    <button id="speakBtn">Speak</button>
+
+    <script>
+        const video = document.getElementById('video');
+        const predictedChar = document.getElementById('predictedChar');
+        const speakBtn = document.getElementById('speakBtn');
+
+        // Access the webcam
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                video.srcObject = stream;
+            })
+            .catch(err => {
+                console.error("Error accessing webcam: ", err);
+            });
+
+        // Placeholder for prediction logic
+        // In a real application, you'd capture the ROI, send it to your model, and get the prediction
+        // For demonstration, we'll simulate predictions every 2 seconds
+        const samplePredictions = ['A', 'B', 'C', 'D', 'E'];
+        setInterval(() => {
+            const randomIndex = Math.floor(Math.random() * samplePredictions.length);
+            predictedChar.textContent = samplePredictions[randomIndex];
+        }, 2000);
+
+        // Text-to-Speech functionality
+        speakBtn.addEventListener('click', () => {
+            const utterance = new SpeechSynthesisUtterance(predictedChar.textContent);
+            speechSynthesis.speak(utterance);
+        });
+    </script>
+
+</body>
+</html>
